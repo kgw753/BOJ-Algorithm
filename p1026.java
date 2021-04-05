@@ -24,12 +24,10 @@ public class p1026 {
             int min = 101;
             for(int j = 0; j < n; j++){
                 if(min > A[j] && !(Asorted.contains(j))){
-                    System.out.println("min : " + j);
                     min = A[j];
                     minIdx = j;
                 }
                 if(max < B[j] && !(Bsorted.contains(j))){
-                    System.out.println("max : " + j);
                     max = B[j];
                     maxIdx = j;
                 }
@@ -40,16 +38,6 @@ public class p1026 {
             Asorted.add(maxIdx);
             Bsorted.add(maxIdx);
         }
-
-        for(int a: A){
-            System.out.print(a + " ");
-        }
-        System.out.println();
-        for(int a: B){
-            System.out.print(a + " ");
-        }
-        System.out.println();
-
 
         int res = 0;
         for(int i = 0; i < n; i++){
