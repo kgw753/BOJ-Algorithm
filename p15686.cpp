@@ -3,37 +3,20 @@ using namespace std;
 #define MAX 50
 int N, M;
 vector<vector<int>> MAP(MAX, vector<int>(MAX, 0));
-vector<vector<int>> visited(MAX, vector<int>(MAX, 0));
-vector<pair<int, int>> house, chicken;
-vector<int> chickenDist(MAX, 1e9);
-int dx[] = {1, 0, -1, 0};
-int dy[] = {0, 1, 0, -1};
-void printV(){
-    cout << "\n";
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            printf("%3d", visited[i][j]);
-        }
-        cout << "\n";
-    }
-}
+vector<vector<int>> chickenIDX;
+vector<pair<int, int>> chicken, house;
+vector<int> hdist(MAX * 2, 1e9);
+vector<int> dist(MAX * MAX, 0);
 
-void distBFS(int sy, int sx){
-    queue<pair<int, int>> q;
-    q.push(make_pair(sy, sx));
-    while(!q.empty()){
-        int y = q.front().first;
-        int x = q.front().second;
-        q.pop();
-        for(int i = 0; i < 4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if(nx < 0 || ny < 0 || nx >= N || ny >= N || (ny == sy && nx == sx)) continue;
-            if(visited[ny][nx] == 0){
-                visited[ny][nx] = visited[y][x] + 1;
-                q.push(make_pair(ny, nx));
-            }
-        }
+void combi(int k, vector<int> v){
+    if(v.size() == M) {
+        chickenIDX.push_back(v);
+        return;
+    }
+    for(int i = k; i < chicken.size(); i++){
+        v.push_back(i);
+        combi(i + 1, v);
+        v.pop_back();
     }
 }
 
@@ -47,15 +30,22 @@ int main(){
         }
     }
 
-    for(int i = 0; i < house.size(); i++){
-        for(int j = 0; j < chicken.size(); j++){
-            int x = abs(house[j].second - chicken[i].second);
-            int y = abs(house[j].first - chicken[i].first);
-            chickenDist[i] = min(chickenDist[i],  x + y);
+    combi(0, vector<int>());
+
+    for(int i = 0; i < chickenIDX.size(); i++){
+        fill(hdist.begin(), hdist.begin() + house.size(), 1e9); 
+        for(int j = 0; j < chickenIDX[i].size(); j++){
+            int y = chicken[chickenIDX[i][j]].first;
+            int x = chicken[chickenIDX[i][j]].second;
+            for(int k = 0; k < house.size(); k++){
+                int dy = house[k].first;
+                int dx = house[k].second;
+                hdist[k] = min(hdist[k], abs(x - dx) + abs(y - dy));
+            }
         }
+        for(int j = 0; j < house.size(); j++) dist[i] += hdist[j];
     }
-    sort(chickenDist.begin(), chickenDist.begin() + chicken.size());
-    for(int i = 0; i < MAX; i++) cout << chickenDist[i] << " ";
-    cout << "\n";
-    cout << chickenDist[M - 1] << "\n";
+
+    sort(dist.begin(), dist.begin() + chickenIDX.size());
+    cout << dist[0] << "\n";
 }
