@@ -1,28 +1,23 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define MAX 20
-int N, answer = -1e9;
+int N, ans = -1e9;
 string input;
-vector<char> op;
 vector<int> numbers;
-
-int calc(int n1, int n2, char op){
+vector<char> op;
+int calc(char op, int n1, int n2){
     if(op == '+') return n1 + n2;
     else if(op == '-') return n1 - n2;
     else return n1 * n2;
 }
-
-void dfs(int depth, int num){
-    if(depth == numbers.size() - 1){
-        answer = max(answer, num);
+void  dfs(int depth, int value){
+    if(depth == op.size()){
+        ans = max(ans, value);
         return;
     }
-    int nextNum = calc(num, numbers[depth + 1], op[depth]);
-    dfs(depth + 1, nextNum);
-    if(numbers.size() - depth > 2){
-        nextNum = calc(numbers[depth + 1], numbers[depth + 2], op[depth + 1]);
-        nextNum = calc(num, nextNum, op[depth]);
-        dfs(depth + 2, nextNum);
+    dfs(depth + 1, calc(op[depth], value, numbers[depth + 1]));
+    if(op.size() - depth >= 2){
+        int num = calc(op[depth + 1], numbers[depth + 1], numbers[depth + 2]);
+        dfs(depth + 2, calc(op[depth], value, num));
     }
 }
 int main(){
@@ -33,5 +28,5 @@ int main(){
         else numbers.push_back(input[i] - '0');
     }
     dfs(0, numbers[0]);
-    cout << answer << "\n";
+    cout << ans << "\n";
 }
