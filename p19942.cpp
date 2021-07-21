@@ -1,75 +1,50 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 16
-#define IDX 6
-int N, ans = INT_MAX;
-vector<vector<int>> MAT(MAX, vector<int>(IDX, 0));
-vector<int> target(4, 0), res;
+int N, ans = 1e9;
+int mp, mf, ms, mv;
+struct A{
+    int mp, mf, ms, mv, cost;
+}arr[MAX];
 
-bool dicCheck(vector<vector<int>> v){
-    string str1, str2;
-    for(int i = 0; i < res.size(); i++) str1 += res[i];
-    for(int i = 0; i < v.size(); i++) str2 += v[i][0];
-    return str1 > str2;
-}
+map<int, vector<vector<int>>> res;
 
-bool check(vector<vector<int>> v){
-    vector<int> tmp(4, 0);
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < v.size(); j++){
-            tmp[i] += v[j][i + 1];
-        }
-    }
-    bool ret = true;
-    for(int i = 0; i < 4; i++){
-        if(tmp[i] < target[i]) ret = false;
-    }
-    return ret;
-}
-
-int sum(vector<vector<int>> v){
-    int ret = 0;
-    for(int i = 0 ; i < v.size(); i++){
-        ret += v[i][5];
-    }
-    return ret;
-}
-
-void combi(int n, int k, vector<vector<int>> v){
-    if(n == v.size()){
-        int s = sum(v);
-        if(check(v) && ans >= s){
-            if(ans == s && dicCheck(v) == false) return;
-            ans = s;
-            res.clear();
-            for(int i = 0; i < v.size(); i++){
-                res.push_back(v[i][0]);
-            }
-        }
-        return;
-    }
-
-    for(int i = k; i < N; i++){
-        v.push_back(MAT[i]);
-        combi(n, i + 1, v);
-        v.pop_back();
-    }
-}
 int main(){
     cin >> N;
-    for(int i = 0; i < 4; i++) cin >> target[i];
-    for(int i = 0; i < N; i++){
-        MAT[i][0] = i + 1;
-        for(int j = 1; j < IDX; j++){
-            cin >> MAT[i][j];
-        }
+    cin >> mp >> mf >> ms >> mv;
+    for(int i = 0 ; i < N; i++){
+        cin >> arr[i].mp >> arr[i].mf >> arr[i].ms >> arr[i].mv >> arr[i].cost;
     }
 
-    for(int i = 0; i <= N; i++){
-        combi(i, 0, vector<vector<int>>());
+    for(int i = 1; i < (1 << N); i++){
+        vector<int> idx;
+        int p, f, s, v, c;
+        p = f = s = v = c = 0;
+        for(int j = 0; j < N; j++){
+            if(i & (1 << j)){
+                idx.push_back(j + 1);
+                p += arr[j].mp;
+                f += arr[j].mf;
+                s += arr[j].ms;
+                v += arr[j].mv;
+                c += arr[j].cost;
+            }
+        }
+
+        if(p >= mp && f >= mf && s >= ms && v >= mv){
+            if(ans >= c){
+                ans = c;
+                res[c].push_back(idx);
+            }
+        }
     }
-    if(res.empty()) ans = -1;
-    cout << ans << "\n";
-    for(int r : res) cout << r << " ";
-    cout << "\n";
+    if(ans == 1e9) cout << -1 << "\n";
+    else{
+        cout << ans << "\n";
+        sort(res[ans].begin(), res[ans].end());
+        for(int i = 0; i < res[ans][0].size(); i++){
+            cout << res[ans][0][i] << " ";
+        }
+        cout << "\n";
+    }
 }
