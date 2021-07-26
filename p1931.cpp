@@ -1,36 +1,22 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-bool cmp(vector<int> v1, vector<int> v2){
-    if(v1[1] == v2[1]){
-        return v1[0] < v2[0];
-    }
-    return v1[1] < v2[1];
+#define MAX 100004
+int N, s, e, ans;
+vector<pair<int, int>> v(MAX);
+bool cmp(pair<int, int> p1, pair<int, int> p2){
+    if(p1.second == p2.second) return p1.first < p2.first;
+    return p1.second < p2.second;
 }
-
 int main(){
-    int N;
     cin >> N;
-
-    vector<vector<int>> chart(N, vector<int>(2, 0));
-
-    int start;
-    int end;
     for(int i = 0; i < N; i++){
-        cin >> start;
-        cin >> end;
-        chart[i] = {start, end};
+        cin >> s >> e;
+        v[i] = make_pair(s, e);
     }
-    
-    sort(chart.begin(), chart.end(), cmp);
-
-    int answer = 0;
-    end = -1;
+    sort(v.begin(), v.begin() + N, cmp);
+    e = -1;
     for(int i = 0; i < N; i++){
-        if(end <= chart[i][0]) {
-            answer++;
-            end = chart[i][1];
-        }
+        if(e <= v[i].first) e = v[i].second, ans++;
     }
-    cout << answer << "\n";
+    cout << ans << "\n";
 }
