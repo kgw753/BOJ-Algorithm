@@ -1,16 +1,14 @@
 #include<bits/stdc++.h>
 using namespace std;
-string input, del;
-string go(string str){
-    for(int i = 0; i <= str.length() - del.length(); i++){
-        if(del == str.substr(i, del.length())) {
-            if(str.length() == del.length()) return "FRULA";
-            else return go(str.erase(i, del.length()));
-        }
-    }
-    return str;
-}
+string input, del, ans;
 int main(){
     cin >> input >> del;
-    cout << go(input) <<"\n";
+    for(int i = 0; i < input.length(); i++){
+        ans += input[i];
+        if(ans.length() >= del.length() && ans.substr(ans.length() - del.length()) == del){
+            ans.erase(ans.length() - del.length());
+        }
+    }
+    if(ans.length()) cout << ans << "\n";
+    else cout << "FRULA\n";
 }
