@@ -1,28 +1,20 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-int N;
-vector<int> numbers;
-
+#define MAX 1004
+int N, ans;
+vector<int> v(MAX, 0), cnt(MAX, 0);
 int main(){
     cin >> N;
-    vector<int> dp(N, 0);
     for(int i = 0; i < N; i++){
-        int n;
-        cin >> n;
-        numbers.push_back(n);
+        cin >> v[i];
     }
-    
-    int answer = -1;
     for(int i = 0; i < N; i++){
-        dp[i] = 1;
+        int maxCnt = 0;
         for(int j = 0; j < i; j++){
-            if(numbers[i] > numbers[j]){
-                dp[i] = max(dp[i], dp[j] + 1);
-            }
+            if(v[i] > v[j] && cnt[j] > maxCnt) maxCnt = cnt[j];
         }
-        answer = max(answer, dp[i]);
+        cnt[i] = maxCnt + 1;
+        ans = max(ans, cnt[i]);
     }
-
-    cout << answer << "\n";
+    cout << ans << "\n";
 }
