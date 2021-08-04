@@ -1,29 +1,15 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-int N;
-vector<int> arr;
+#define MAX 1004
+int N, num, len, lowerPos = 0;
+vector<int> v(MAX, 0);
 int main(){
     cin >> N;
     for(int i = 0; i < N; i++){
-        int num;
         cin >> num;
-        arr.push_back(num);
+        auto lowerPos = lower_bound(v.begin(), v.begin() + len, num);
+        if(*lowerPos == 0) len++;
+        *lowerPos = num;
     }
-
-    int answer = -1;
-    vector<int> dp(N, 0);
-
-    for(int i = 0; i < N; i++){
-        dp[i] = 1;
-
-        for(int j = 0; j < i; j++){
-            if(arr[i] > arr[j]){
-                dp[i] = max(dp[j] + 1, dp[i]);
-            }
-        }
-        answer = max(answer, dp[i]);
-    }
-
-    cout << answer << "\n";
+    cout << len << "\n";
 }
