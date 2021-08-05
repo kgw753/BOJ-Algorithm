@@ -1,26 +1,24 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 20004
-int T, N, M, aPos, bPos, cnt;
+int T, N, M;
 vector<int> A(MAX, 0), B(MAX, 0);
-vector<int> ans;
 int main(){
+    ios::sync_with_stdio(false);
+    cout.tie(NULL);
+    cin.tie(NULL);
     cin >> T;
     while(T--){
         cin >> N >> M;
         for(int i = 0; i < N; i++) cin >> A[i];
         for(int i = 0; i < M; i++) cin >> B[i];
-        sort(A.begin(), A.begin() + N, greater<int>());
-        sort(B.begin(), B.begin() + M, greater<int>());
-        aPos = bPos = cnt = 0;
-        while(bPos < M){
-            while(A[aPos] > B[bPos] && aPos < N){
-                cnt += (M - bPos);
-                aPos++;
-            }
-            bPos++;
+        sort(A.begin(), A.begin() + N);
+        sort(B.begin(), B.begin() + M);
+        int cnt = 0;
+        for(int i = 0; i < N; i++){
+            auto pos = lower_bound(B.begin(), B.begin() + M, A[i]);
+            cnt += (int)(pos - B.begin());
         }
-        ans.push_back(cnt);
+        cout << cnt << "\n";
     }
-    for(int i : ans) cout << i << "\n";
 }
