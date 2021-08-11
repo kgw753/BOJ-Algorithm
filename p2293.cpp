@@ -1,27 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
-int N, K;
-vector<int> coins;
-long long answer;
-
+#define MAX 104
+int N, K, num;
+int dp[10004];
 int main(){
     cin >> N >> K;
+    dp[0] = 1;
     for(int i = 0; i < N; i++){
-        int v;
-        cin >> v;
-        coins.push_back(v);
-    }
-    
-    sort(coins.begin(), coins.end());
-
-    vector<int> dp(K + 1, 0);
-
-    for(int i = 0; i < N; i++){
-        dp[coins[i]]++;
-        for(int j = coins[i]; j < K + 1; j++){
-            dp[j] += dp[j - coins[i]];
+        cin >> num;
+        for(int j = num; j <= K; j++){
+            dp[j] += dp[j - num];
         }
-    }
-
+    } 
     cout << dp[K] << "\n";
 }
