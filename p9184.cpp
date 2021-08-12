@@ -11,10 +11,10 @@ int w(int a, int b, int c){
     else return ret = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1);
 }
 int main(){
+    memset(dp, 0, sizeof(dp));
     while(true){
         scanf("%d %d %d", &a, &b, &c);
         if(a == -1 && b == -1 && c == -1) break;
-        memset(dp, 0, sizeof(dp));
         printf("w(%d, %d, %d) = %d\n", a, b, c, w(a, b, c));
     }
 }
