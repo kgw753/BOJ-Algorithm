@@ -1,18 +1,17 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 104
+#define w_MAX 100004
 int N, K;
 vector<int> w(MAX, 0), v(MAX, 0);
-int dp[100004][MAX];
-int go(int idx, int now){
+int dp[MAX][w_MAX];
+int go(int idx, int weight){
     if(idx == N) return 0;
-    int &ret = dp[now][idx];
+    int &ret = dp[idx][weight];
     if(ret) return ret;
-    int r1, r2;
-    if(now + w[idx] > K) r1 = 0;
-    else r1 = go(idx + 1, now + w[idx]) + v[idx];
-    r2 = go(idx + 1, now);
-    return ret = max(r1, r2);
+    int yes = (weight + w[idx] > K) ? 0 : go(idx + 1, weight + w[idx]) + v[idx];
+    int no = go(idx + 1, weight);
+    return ret = max(yes, no);
 }
 int main(){
     cin >> N >> K;
