@@ -17,5 +17,4 @@ int main(){
         if(N == 0) break;
         cout << go(N, 0) << "\n";
     }
-    
 }
