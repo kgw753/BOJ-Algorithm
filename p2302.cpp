@@ -1,22 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define MAX 42
-int N, M, now, pre, dp[MAX], ans = 1;
-void fillDp(){
-    dp[0] = 1;
-    dp[1] = 1;
-    for(int i = 2; i < MAX; i++){
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
-}
+#define MAX 44
+int N, M, s, e, dp[MAX], ans = 1;
 int main(){
+    dp[0] = dp[1] = 1;
+    for(int i = 2; i < MAX; i++) dp[i] = dp[i - 1] + dp[i - 2];
     cin >> N >> M;
-    fillDp();
-    for(int i = 0; i < M; i++) {
-        cin >> now;
-        ans *= dp[(now - 1) - pre];
-        pre = now; 
+    for(int i = 0; i < M; i++){
+        cin >> e;
+        ans *= dp[(e - 1) - s];
+        s = e;
     }
-    ans *= dp[N - pre];
+    ans *= dp[N - s];
     cout << ans << "\n";
 }
