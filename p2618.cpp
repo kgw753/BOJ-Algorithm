@@ -2,7 +2,6 @@
 using namespace std;
 #define MAX 1004
 int N, W, x, y, dp[MAX][MAX];
-vector<int> v;
 struct Case{
     int y, x;
 };
