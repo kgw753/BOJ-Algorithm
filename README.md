@@ -1,2 +1,1 @@
-# Sensor-based-posture-correction
-# Sensor-based-posture-correction
+#백준 알고리즘 공부하는 곳입니다.
