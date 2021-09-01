@@ -1,49 +1,36 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-int N, M, K;
-int dy[4] = {0, 1, 0, -1};
-int dx[4] = {1, 0, -1, 0};
-void DFS(vector<vector<int>> map, vector<vector<bool>> &visited, int y, int x){
-    if(visited[y][x] || map[y][x] == 0) return;
-    visited[y][x] = true;
-    
+#define MAX 54
+int T, N, M, K, x, y, cnt, MAP[MAX][MAX];
+int dx[] = {1, 0, -1, 0};
+int dy[] = {0, 1, 0, -1};
+void go(int y, int x){
     for(int i = 0; i < 4; i++){
-        int ny = y + dy[i];
         int nx = x + dx[i];
-        if(nx >= 0 && ny >= 0 && nx < N && ny < M){
-            DFS(map, visited, ny, nx);
-        }
+        int ny = y + dy[i];
+        if(ny < 0 || nx < 0 || ny >= N || nx >= M || MAP[ny][nx] != 1) continue;
+        MAP[ny][nx]++;
+        go(ny, nx);
     }
 }
-
 int main(){
-    int tc;
-    cin >> tc;
-    vector<int> answer;
-    for(int i = 0; i < tc; i++){
-        cin >> N >> M >> K;
-        vector<vector<int>> map(M, vector<int>(N, 0));
-        for(int j = 0; j < K; j++){
-            int x, y;
+    cin >> T;
+    while(T--){
+        memset(MAP, 0, sizeof(MAP));
+        cnt = 0;
+        cin >> M >> N >> K;
+        for(int i = 0; i < K; i++){
             cin >> x >> y;
-            map[y][x]++;
+            MAP[y][x] = 1;
         }
-
-        vector<vector<bool>> visited(M, vector<bool>(N, false));
-        int cnt = 0;
-        for(int p = 0; p < M; p++){
-            for(int q = 0; q < N; q++){
-                if(visited[p][q] == false && map[p][q] == 1){
-                    DFS(map, visited, p, q);
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                if(MAP[i][j] == 1){
+                    go(i, j);
                     cnt++;
                 }
             }
         }
-        answer.push_back(cnt);
-    }
-
-    for(int ans : answer){
-        cout << ans << "\n";
+        cout << cnt << "\n";
     }
 }
