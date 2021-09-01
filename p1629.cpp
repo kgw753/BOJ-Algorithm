@@ -1,25 +1,15 @@
 #include<bits/stdc++.h>
 using namespace std;
-long long A, B, C;
-map<long, long> mem;
-
-long long calc(long long a, long long b){
-    if(mem[b]) return mem[b];
-    if(b == 1){
-        mem[b] = a % C;
-        return a % C;
-    }
-    if(b % 2){
-        mem[b - 1] = calc(a, b - 1);
-        return (mem[b - 1] * mem[1]) % C;
-    }
-    else{
-        mem[b / 2] = calc(a, b / 2);
-        return (mem[b / 2] * mem[b / 2]) % C;
-    }
+typedef long long ll;
+ll a, b, c;
+ll go(ll a, ll b){
+    if(b == 1) return a % c;
+    ll tmp = go(a, b / 2) % c;
+    tmp = tmp * tmp % c;
+    if(b % 2) tmp = tmp * a % c;
+    return tmp;
 }
-
 int main(){
-    cin >> A >> B >> C;
-    cout << calc(A, B) << "\n";
+    cin >> a >> b >> c;
+    cout << go(a, b) << "\n";
 }
