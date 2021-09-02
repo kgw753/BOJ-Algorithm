@@ -1,23 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
-int N, M, J, res;
-vector<int> app;
+int N, M, J, pos, cnt, l, r;
 int main(){
     cin >> N >> M >> J;
-
+    l = 1, r = M;
     for(int i = 0; i < J; i++){
-        int a;
-        cin >> a;
-        app.push_back(a);
+        cin >> pos;
+        while(pos < l || pos > r){
+            if(pos > r) l++, r++;
+            else l--, r--;
+            cnt++;
+        }
     }
-
-    int pos = 0, mov = 0;
-    for(int i = 0; i < J; i++){
-        if(pos < app[i] && pos + M >= app[i]) continue;
-        if(pos + M < app[i]) mov = app[i] - (pos + M);
-        else mov = app[i] - pos - 1;
-        pos += mov;
-        res += abs(mov);
-    }
-    cout << res << "\n";
+    cout << cnt << "\n";
 }
