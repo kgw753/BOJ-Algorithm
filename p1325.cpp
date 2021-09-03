@@ -1,34 +1,30 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define MAX 10001
-int N, M, A, B, cnt;
-vector<int> dp(MAX, 0);
-vector<int> visited(MAX, false);
-vector<vector<int>> relation(MAX, vector<int>());
-
-int dfs(int k){
-    visited[k] = true;
-    int n = 1;
-    for(int i = 0; i < relation[k].size(); i++){
-        if(visited[relation[k][i]]) continue;
-        n += dfs(relation[k][i]);
+#define MAX 10004
+int N, M, a, b, visited[MAX], answer[MAX];
+vector<vector<int>> MAP(MAX, vector<int>());
+int dfs(int idx){
+    visited[idx] = 1;
+    int ret = 1;
+    for(int nxt : MAP[idx]){
+        if(visited[nxt]) continue;
+        ret += dfs(nxt);
     }
-    return n;
+    return ret;
 }
 int main(){
     cin >> N >> M;
     for(int i = 0; i < M; i++){
-        cin >> A >> B;
-        relation[B].push_back(A);
+        cin >> a >> b;
+        a--, b--;
+        MAP[b].push_back(a);
     }
-    for(int i = 1; i <= N; i++){
-        fill(visited.begin(), visited.begin() + N + 1, false);
-        dp[i] = dfs(i);
-        cnt = max(cnt, dp[i]);
+    int mx = -1;
+    for(int i = 0; i < N; i++){
+        memset(visited, 0, sizeof(visited));
+        answer[i] = dfs(i);
+        mx = max(mx, answer[i]);
     }
-
-    for(int i = 1; i <= N; i++){
-        if(cnt == dp[i]) cout << i << " ";
-    }
+    for(int i = 0; i < N; i++) if(mx == answer[i]) cout << i + 1 << " ";
     cout << "\n";
 }
