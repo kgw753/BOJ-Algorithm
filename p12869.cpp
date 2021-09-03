@@ -1,31 +1,31 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 64
-int N, scv[3], visited[MAX][MAX][MAX];
+int N, scv[3], dp[MAX][MAX][MAX];
 struct SCV{
-    int s1, s2, s3;
+    int a, b, c;
 };
 queue<SCV> q;
-int go(int s1, int s2, int s3){
-    visited[s1][s2][s3] = 1;
-    q.push(SCV({s1, s2, s3}));
+int go(int scv1, int scv2, int scv3){
+    q.push({scv1, scv2, scv3});
+    dp[scv1][scv2][scv3] = 1;
+    vector<int> dmg({1, 3, 9});
     while(q.size()){
-        s1 = q.front().s1;
-        s2 = q.front().s2;
-        s3 = q.front().s3;
+        if(dp[0][0][0]) break;
+        scv1 = q.front().a;
+        scv2 = q.front().b;
+        scv3 = q.front().c;
         q.pop();
-        if(visited[0][0][0]) break;
-        vector<int>dmg({1, 3, 9});
         do{
-            int ns1 = max(0, s1 - dmg[0]);
-            int ns2 = max(0, s2 - dmg[1]);
-            int ns3 = max(0, s3 - dmg[2]);
-            if(visited[ns1][ns2][ns3]) continue;
-            visited[ns1][ns2][ns3] = visited[s1][s2][s3] + 1;
-            q.push(SCV({ns1, ns2, ns3}));
+            int n1 = max(0, scv1 - dmg[0]);
+            int n2 = max(0, scv2 - dmg[1]);
+            int n3 = max(0, scv3 - dmg[2]);
+            if(dp[n1][n2][n3]) continue;
+            dp[n1][n2][n3] = dp[scv1][scv2][scv3] + 1;
+            q.push({n1, n2, n3});
         }while(next_permutation(dmg.begin(), dmg.end()));
     }
-    return visited[0][0][0] - 1;
+    return dp[0][0][0] - 1;
 }
 int main(){
     cin >> N;
