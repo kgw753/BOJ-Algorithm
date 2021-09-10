@@ -2,16 +2,15 @@
 using namespace std;
 #define MAX 1000004
 int T, N, M;
-vector<int> A(MAX, 0), B(MAX, 0);
-bool check(int target){
+vector<int> v1(MAX), v2(MAX);
+int check(int target){
     int lo = 0;
     int hi = N - 1;
-    int mid;
     while(lo <= hi){
-        mid = (lo + hi) / 2;
-        if(A[mid] == target) return 1;
-        else if(A[mid] > target) hi = mid - 1;
-        else if(A[mid] < target) lo = mid + 1;
+        int mid = (lo + hi) / 2;
+        if(v1[mid] == target) return 1;
+        if(v1[mid] > target) hi = mid - 1; 
+        if(v1[mid] < target) lo = mid + 1;
     }
     return 0;
 }
@@ -22,12 +21,11 @@ int main(){
     cin >> T;
     while(T--){
         cin >> N;
-        for(int i = 0; i < N; i++) cin >> A[i];
-        sort(A.begin(), A.begin() + N);
+        for(int i = 0; i < N; i++) cin >> v1[i];
         cin >> M;
-        for(int i = 0; i < M; i++) {
-            cin >> B[i];
-            cout << check(B[i]) << "\n";
-        }
+        for(int i = 0; i < M; i++) cin >> v2[i];
+        sort(v1.begin(), v1.begin() + N);
+        for(int i = 0; i < M; i++) cout << check(v2[i]) << " ";
+        cout << "\n";
     }
 }
