@@ -1,37 +1,42 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 20004
-int V, E, K, u, v, w, cost[MAX];
-vector<pair<int, int>> adj[MAX];
+int V, E, start, a, b, c;
+vector<vector<pair<int, int>>> MAP(MAX, vector<pair<int, int>>());
 priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-int main(){
-    ios_base::sync_with_stdio(false);
-    cout.tie(NULL);
-    cin.tie(NULL);
-    scanf("%d %d %d", &V, &E, &K);
-    fill(cost, cost + MAX, 1e9);
-    for(int i = 0; i < E; i++){
-        scanf("%d %d %d", &u, &v, &w);
-        adj[u].push_back({w, v});
-    }
-    pq.push({0, K});
-    cost[K] = 0;
+int cost[MAX];
+void go(int start){
+    pq.push({0, start});
+    cost[start] = 0;
     while(pq.size()){
-        int from = pq.top().second;
-        int dist = pq.top().first;
+        int here = pq.top().second;
+        int here_cost = pq.top().first;
         pq.pop();
-        if(dist != cost[from]) continue;
-        for(pair<int, int> p : adj[from]){
-            int to = p.second;
-            int d = p.first;
-            if(cost[to] > cost[from] + d){
-                cost[to] = cost[from] + d;
-                pq.push({cost[to], to});
+        if(here_cost != cost[here]) continue;
+        for(pair<int, int> p : MAP[here]){
+            int there = p.second;
+            int there_cost = p.first;
+            if(there_cost + here_cost < cost[there]){
+                cost[there] = there_cost + here_cost;
+                pq.push({cost[there], there});
             }
         }
     }
-    for(int i = 1; i <= V; i++) {
-        if(cost[i] == 1e9) printf("INF\n");
-        else printf("%d\n", cost[i]);
+}
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    fill(cost, cost + MAX, 1e9);
+    cin >> V >> E >> start;
+    pq.push({0, start});
+    for(int i = 0; i < E; i++){
+        cin >> a >> b >> c;
+        MAP[a].push_back({c, b});
+    }
+    go(start);
+    for(int i = 1; i <= V; i++){
+        if(cost[i] == 1e9) cout << "INF\n";
+        else cout << cost[i] << "\n";
     }
 }
