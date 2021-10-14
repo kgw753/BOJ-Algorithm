@@ -1,12 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
-int input;
 int main(){
-    while(scanf("%d", &input) != EOF){
-        int one = 1;
+    int N;
+    while(scanf("%d", &N) != EOF){
         int ans = 1;
-        while(one % input){
-            one = (one * 10 + 1) % input;
+        int one = 1;
+        while(one % N){
+            one = (one * 10 + 1) % N;
             ans++;
         }
         printf("%d\n", ans);
