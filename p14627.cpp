@@ -2,31 +2,36 @@
 using namespace std;
 #define MAX 1000004
 typedef long long ll;
-ll S, C, sum, len, cnt;
-vector<ll> L(MAX, 0);
-bool check(int mid){
-    cnt = 0;
-    for(int i = 0; i < S; i++){
+ll S, C, hi, lo, mid, len;
+vector<ll> L(MAX);
+bool check(ll mid){
+    ll cnt = 0;
+    for(ll i = 0; i < S; i++){
         cnt += (L[i] / mid);
     }
     return cnt >= C;
 }
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> S >> C;
-    for(int i = 0; i < S; i++){
+    ll sum = 0;
+    for(ll i = 0; i < S; i++){
         cin >> L[i];
         sum += L[i];
     }
-    ll lo = 1;
-    ll hi = 1e9;
-    ll mid;
+    hi = 1e9;
+    lo = 1;
     while(lo <= hi){
-        mid = (lo + hi) / 2;
+        mid = (hi + lo) / 2;
         if(check(mid)){
             lo = mid + 1;
-            len = mid;
+            len = max(len, mid);
         }
-        else hi = mid - 1;
+        else {
+            hi = mid - 1;
+        }
     }
-    cout << sum - (C * len) << "\n";
+    cout << sum - len * C << "\n";
 }
