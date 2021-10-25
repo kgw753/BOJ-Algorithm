@@ -1,44 +1,62 @@
 #include<bits/stdc++.h>
 using namespace std;
-int N, mp, mf, ms, mv, ans = 1e9;
-int p, f, s, v, c;
+int N, mp, mf, ms, mv, mc = 1e9;
+int p, f, s, v, cost;
+priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>, greater<pair<int, vector<int>>>> ans;
 struct Food{
-    int p, f, s, v, c;
+    int p, f, s, v, cost;
 };
-vector<Food> fd(19);
-vector<int> idxs;
-bool check(string tmp){
-    if(idxs.empty()) return true;
-    return string(idxs.begin(), idxs.end()) > tmp;
+vector<Food> foods;
+bool checkBal(Food food){
+    if(food.f >= mf && food.p >= mp && food.s >= ms && food.v >= mv) return true;
+    return false;
+}
+int isCorrect(int bm){
+    Food tmp = {0, 0, 0, 0, 0};
+    for(int i = 0; i < N; i++){
+        if((1 << i) & bm){
+            tmp.p += foods[i].p;
+            tmp.f += foods[i].f;
+            tmp.s += foods[i].s;
+            tmp.v += foods[i].v;
+            tmp.cost += foods[i].cost;
+        }
+    }
+    if(checkBal(tmp)) return tmp.cost;
+    else return -1;
+}
+vector<int> makeVec(int bm){
+    vector<int> ret;
+    for(int i = 0; i < N; i++){
+        if((1 << i) & bm){
+            ret.push_back(i + 1);
+        }
+    }
+    return ret;
 }
 int main(){
-    cin >> N >> mp >> mf >> ms >> mv;
+    cin >> N;
+    cin >> mp >> mf >> ms >> mv;
     for(int i = 0; i < N; i++){
-        cin >> fd[i].p >> fd[i].f >> fd[i].s >> fd[i].v >> fd[i].c;
+        cin >> p >> f >> s >> v >> cost;
+        foods.push_back({p, f, s, v, cost});
     }
     for(int i = 1; i < (1 << N); i++){
-        vector<int> tmp;
-        p = f = s = v = c = 0;
-        for(int j = 0; j < N; j++){
-            if(i & (1 << j)){
-                tmp.push_back(j + 1);
-                p += fd[j].p;
-                f += fd[j].f;
-                s += fd[j].s;
-                v += fd[j].v;
-                c += fd[j].c;
-            }
-        }
-        if(p < mp || f < mf || s < ms || v < mv) continue;
-        if(ans > c || (ans == c && check(string(tmp.begin(), tmp.end())))){
-            idxs = tmp;
-            ans = c;
+        int check = isCorrect(i);
+        if(check == -1) continue;
+        if(mc >= check){
+            mc = check;
+            ans.push({mc, makeVec(i)});
         }
     }
-    if(ans == 1e9) cout << -1 << "\n";
+    if(mc == 1e9){
+        cout << -1 << "\n";
+    }
     else{
-        cout << ans << "\n";
-        for(int i : idxs) cout << i << " ";
+        cout << mc << "\n";
+        for(int i : ans.top().second){
+            cout << i << " ";
+        }
         cout << "\n";
     }
 }
