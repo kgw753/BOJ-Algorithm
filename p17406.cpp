@@ -1,17 +1,18 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define MAX 54
-int N, M, K, r, c, s, res = 1e9;
+
+int N, M, C, r, c, s;
 vector<vector<int>> MAP(MAX, vector<int>(MAX, 0));
-vector<tuple<int, int, int>> op;
-int minCheck(){
+vector<vector<int>> op;
+int getRes(){
     int ret = 1e9;
     for(int i = 0; i < N; i++){
-        int mn = 0;
+        int sum = 0;
         for(int j = 0; j < M; j++){
-            mn += MAP[i][j];
+            sum += MAP[i][j];
         }
-        ret = min(ret, mn);
+        ret = min(ret, sum);
     }
     return ret;
 }
@@ -32,29 +33,30 @@ void rot(int r, int c, int s){
     MAP = tmp;
 }
 int main(){
-    cin >> N >> M >> K;
+    cin >> N >> M >> C;
     for(int i = 0; i < N; i++){
         for(int j = 0; j < M; j++){
             cin >> MAP[i][j];
         }
     }
-    for(int i = 0; i < K; i++){
+    for(int i = 0; i < C; i++){
         cin >> r >> c >> s;
         r--, c--;
         op.push_back({r, c, s});
     }
-    vector<vector<int>> tmp(MAP);
     sort(op.begin(), op.end());
+    int res = 1e9;
     do{
+        vector<vector<int>> tmp(MAP);
         for(int i = 0; i < op.size(); i++){
-            r = get<0>(op[i]);
-            c = get<1>(op[i]);
-            s = get<2>(op[i]);
-            for(int j = 0; j < s; j++){
-                rot(r, c, s - j);
+            r = op[i][0];
+            c = op[i][1];
+            s = op[i][2];
+            for(int j = 0; j <= s; j++){
+                rot(r, c, j);
             }
         }
-        res = min(res, minCheck());
+        res = min(res, getRes());
         MAP = tmp;
     }while(next_permutation(op.begin(), op.end()));
     cout << res << "\n";
