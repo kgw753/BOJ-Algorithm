@@ -5,12 +5,11 @@ using namespace std;
 int T, W;
 vector<int> v(MAX);
 int dp[MAX][2][MAX_MOV];
-int go(int t, int pos, int rem){
-    if(rem < 0) return -1;
-    if(t == T) return 0;
-    int &ret = dp[t][pos][rem];
+int go(int sec, int pos, int mov){
+    if(mov > W || sec == T) return 0;
+    int &ret = dp[sec][pos][mov];
     if(~ret) return ret;
-    return ret = max(go(t + 1, pos, rem), go(t + 1, !pos, rem - 1)) + (v[t] == pos);
+    return ret = max(go(sec + 1, pos, mov), go(sec + 1, pos ^ 1, mov + 1)) + (v[sec] == pos);
 }
 int main(){
     cin >> T >> W;
@@ -19,5 +18,5 @@ int main(){
         v[i]--;
     }
     memset(dp, -1, sizeof(dp));
-    cout << max(go(0, 0, W), go(0, 1, W - 1)) << "\n";
+    cout << max(go(0, 0, 0), go(0, 1, 1)) << "\n";
 }
