@@ -2,20 +2,19 @@
 using namespace std;
 #define MAX 17
 int N;
+int T[MAX], P[MAX];
 int dp[MAX];
-vector<pair<int, int>> v(MAX);
-int go(int d){
-    if(d > N) return -1e9;
-    if(d == N) return 0;
-    int &ret = dp[d];
-    if(~ret) return ret;
-    return ret = max(go(d + 1), go(d + v[d].first) + v[d].second);
+int go(int day){
+	if(day == N) return 0;
+	if(day > N) return -1e9;
+	int &ret = dp[day];
+	if(ret) return ret;
+	return ret = max(go(day + 1), go(day + T[day]) + P[day]);
 }
 int main(){
-    cin >> N;
-    memset(dp, -1, sizeof(dp));
-    for(int i = 0; i < N; i++){
-        cin >> v[i].first >> v[i].second;
-    }
-    cout << go(0) << "\n";
+	cin >> N;
+	for(int i = 0; i < N; i++){
+		cin >> T[i] >> P[i];
+	}
+	cout << go(0) << "\n";
 }
