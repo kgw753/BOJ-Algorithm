@@ -27,7 +27,6 @@ public class p17298 {
             } 
             stack.add(i);
         }
-    
         for(int a : ans) bw.write(a + " ");
         bw.flush();
         
