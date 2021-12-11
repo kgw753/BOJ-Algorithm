@@ -45,7 +45,7 @@ public class p12869 {
         Queue<int[]> q = new LinkedList<>();
         int ret = Integer.MAX_VALUE;
         q.add(new int[]{scv[0], scv[1], scv[2]});
-        dp[scv[0]][scv[1]][scv[2]] = 1;
+        dp[scv[0]][scv[1]][scv[2]] = 0;
 
         while(!q.isEmpty()){
             int s1 = q.peek()[0];
@@ -64,6 +64,6 @@ public class p12869 {
             }
         }
 
-        return dp[0][0][0] - 1;
+        return dp[0][0][0];
     }
 }
