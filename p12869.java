@@ -6,25 +6,28 @@ import java.util.Scanner;
 public class p12869 {
     public static int N;
     public static int[] scv = new int[3];
-    public static ArrayList<int[]> dmgs = new ArrayList<>();
     public static int[][][] dp = new int[61][61][61];
+    public static ArrayList<int []> seq = new ArrayList<>();
 
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        for(int i = 0; i < N; i++){
-            scv[i] = sc.nextInt();
-        }
+        N = Integer.parseInt(sc.nextLine());
 
-        dmgs = new ArrayList<>();
+        String[] input = sc.nextLine().split(" ");
+        for(int i = 0; i < N; i++) {
+            scv[i] = Integer.parseInt(input[i]);
+        }
+        
         makePermutation(new int[]{9, 3, 1}, 0);
 
-        System.out.println(go());
+        bfs(scv[0], scv[1], scv[2]);
+
+        System.out.println(dp[0][0][0]);
     }
 
     public static void makePermutation(int[] dmg, int depth){
         if(depth == 3){
-            dmgs.add(dmg.clone());
+            seq.add(dmg.clone());
             return;
         }
 
@@ -35,35 +38,31 @@ public class p12869 {
         }
     }
 
-    public static void swap(int[] dmg, int depth, int idx){
-        int tmp = dmg[depth];
-        dmg[depth] = dmg[idx];
-        dmg[idx] = tmp;
+    public static void swap(int[] dmg, int i1, int i2){
+        int tmp = dmg[i1];
+        dmg[i1] = dmg[i2];
+        dmg[i2] = tmp;
     }
 
-    public static int go(){
+    public static void bfs(int s1, int s2, int s3){
         Queue<int[]> q = new LinkedList<>();
-        int ret = Integer.MAX_VALUE;
-        q.add(new int[]{scv[0], scv[1], scv[2]});
-        dp[scv[0]][scv[1]][scv[2]] = 0;
+        q.add(new int[]{s1, s2, s3});
 
         while(!q.isEmpty()){
-            int s1 = q.peek()[0];
-            int s2 = q.peek()[1];
-            int s3 = q.peek()[2];
+            s1 = q.peek()[0];
+            s2 = q.peek()[1];
+            s3 = q.peek()[2];
             q.poll();
-            
-            for(int i = 0; i < dmgs.size(); i++){
-                int ns1 = Math.max(0, s1 - dmgs.get(i)[0]);
-                int ns2 = Math.max(0, s2 - dmgs.get(i)[1]);
-                int ns3 = Math.max(0, s3 - dmgs.get(i)[2]);
+
+            for(int[] dmg : seq){
+                int ns1 = Math.max(0, s1 - dmg[0]);
+                int ns2 = Math.max(0, s2 - dmg[1]);
+                int ns3 = Math.max(0, s3 - dmg[2]);
+
                 if(dp[ns1][ns2][ns3] != 0) continue;
                 dp[ns1][ns2][ns3] = dp[s1][s2][s3] + 1;
-                if(ns1 == 0 && ns2 == 0 && ns3 == 0) ret = Math.min(ret, dp[0][0][0]);
                 q.add(new int[]{ns1, ns2, ns3});
             }
         }
-
-        return dp[0][0][0];
     }
 }
