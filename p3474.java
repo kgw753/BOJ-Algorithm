@@ -1,27 +1,17 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class p3474 {
-    public static int tc;
-    public static ArrayList<Integer> ans;
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        ans = new ArrayList<>();
-        tc = Integer.parseInt(br.readLine());
-        int input;
-        while(tc-- > 0){
-            input = Integer.parseInt(br.readLine());
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        for(int i = 0; i < N; i++){
+            int num = sc.nextInt();
             int cnt = 0;
-
-            for(int i = input; i > 0; i /= 5){
-                cnt += i / 5;
+            while(num > 0){
+                num /= 5;
+                cnt += num;
             }
-
-            ans.add(cnt);
+            System.out.println(cnt);
         }
-
-        for(Integer a : ans) System.out.println(a);
     }
 }
