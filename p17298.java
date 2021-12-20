@@ -3,34 +3,38 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 public class p17298 {
+    public static int N;
+    public static Stack<int[]> st = new Stack<>();
+    public static int[] ans;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        int N = Integer.parseInt(br.readLine());
-        String[] inputStr = br.readLine().split(" ");
-        int[] input = Arrays.stream(inputStr).mapToInt(Integer::parseInt).toArray();
-        int[] ans = new int[N];
-
+        N = Integer.parseInt(br.readLine());
+        ans = new int[N];
         Arrays.fill(ans, -1);
-        Stack<Integer> stack = new Stack<>();
-        
+
+        String[] input = br.readLine().split(" ");
         for(int i = 0; i < N; i++){
-            while(!stack.isEmpty() && input[stack.peek()] < input[i]){
-                ans[stack.pop()] = input[i];
-            } 
-            stack.add(i);
+            int now = Integer.parseInt(input[i]);
+            
+            
+            while(!st.isEmpty() && st.peek()[0] < now){
+                int idx = st.pop()[1];
+                
+                ans[idx] = now;
+            }
+
+            st.add(new int[]{now, i});
         }
-        for(int a : ans) bw.write(a + " ");
+
+        for(int a : ans){
+            bw.write(a + " ");
+        }
+        bw.write("\n");
         bw.flush();
-        
-        br.close();
-        bw.close();
     }
 }
