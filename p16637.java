@@ -1,36 +1,45 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class p16637 {
-    public static int N;
-    public static int res = Integer.MIN_VALUE;
-    public static ArrayList<Integer> numbers = new ArrayList<>();
-    public static ArrayList<Character> operators = new ArrayList<>();
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        N = Integer.parseInt(sc.nextLine());
+    public static int N, res = Integer.MIN_VALUE;
+    public static List<Integer> numbers = new ArrayList<>();
+    public static List<Character> operators = new ArrayList<>();
 
-        String input = sc.nextLine();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+
+        String input = br.readLine();
+
         for(int i = 0; i < N; i++){
-            if(i % 2 == 0) numbers.add(input.charAt(i) - '0');
-            else operators.add(input.charAt(i));
-        }
+            char c = input.charAt(i);
 
-        dfs(0, numbers.get(0));
+            if(i % 2 == 0) numbers.add(c - '0');
+            else operators.add(c);
+        }
+        
+        dfs(numbers.get(0), 0);
+
         System.out.println(res);
     }
 
-    public static void dfs(int depth, int num){
-        if(depth == operators.size()){
-            res = Math.max(res, num);
+    public static void dfs(int val, int idx){
+        if(idx == N / 2){
+            res = Math.max(res, val);
             return;
         }
 
-        dfs(depth + 1, calc(num, numbers.get(depth + 1), operators.get(depth)));
+        int nVal = calc(val, numbers.get(idx + 1), operators.get(idx));
+        dfs(nVal, idx + 1);
 
-        if(operators.size() - depth >= 2){
-            int nextNum = calc(numbers.get(depth + 1), numbers.get(depth + 2), operators.get(depth + 1));
-            dfs(depth + 2, calc(num, nextNum, operators.get(depth)));
+        if(idx + 1 < N / 2){
+            nVal = calc(numbers.get(idx + 1), numbers.get(idx + 2), operators.get(idx + 1));
+            nVal = calc(val, nVal, operators.get(idx));
+            dfs(nVal, idx + 2);
         }
     }
 
