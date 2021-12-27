@@ -7,47 +7,38 @@ import java.util.List;
 
 public class p2529 {
     public static int N;
-    public static List<Character> op = new ArrayList<>();
-    public static List<String> res = new ArrayList<>();
+    public static char[] op;
     public static boolean[] visited = new boolean[10];
-
+    public static List<String> res = new ArrayList<>();
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        String[] input = br.readLine().split(" ");
+        op = br.readLine().replace(" ", "").toCharArray();
 
-        for(int i = 0; i < N; i++){
-            op.add(input[i].charAt(0));
-        }
-        
-        go("", 0);
+        combi(-1, "");
 
         Collections.sort(res);
-
         System.out.println(res.get(res.size() - 1));
         System.out.println(res.get(0));
     }
 
-    public static void go(String nums, int depth){
-        if(depth == N + 1){
-            res.add(nums);
+    public static void combi(int depth, String num){
+        if(depth == N){
+            res.add(num);
             return;
         }
-        
         for(int i = 0; i < 10; i++){
-            char now = (char)(i + '0');
             if(visited[i]) continue;
-            if(nums.length() == 0 || isValid((int)(nums.charAt(depth - 1) - '0'), i, op.get(depth - 1))){
+            if(depth == -1 || checkOp(num.charAt(depth) - '0', i, op[depth])){
                 visited[i] = true;
-                go(nums + now, depth + 1);
+                combi(depth + 1, num + (char)(i + '0'));
                 visited[i] = false;
             }
         }
     }
 
-    public static boolean isValid(int a, int b, char o){
+    public static boolean checkOp(int a, int b, char o){
         if(o == '<') return a < b;
         else return a > b;
     }
-    
 }
