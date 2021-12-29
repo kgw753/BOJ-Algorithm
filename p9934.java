@@ -1,40 +1,42 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class p9934 {
-    public static int N, nodeCnt;
+    public static int N;
     public static int[] arr;
+
     public static ArrayList<ArrayList<Integer>> tree = new ArrayList<>();
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        N = Integer.parseInt(sc.nextLine());
-        String[] input = sc.nextLine().split(" ");
-        nodeCnt = (int)Math.pow(2, N) - 1;
-
-        arr = new int[nodeCnt];
-        for(int i = 0; i < nodeCnt; i++){
-            arr[i] = Integer.parseInt(input[i]);
-        }
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
         
-        for(int i = 0; i < N; i++){
-            tree.add(new ArrayList<>());
+        arr = new int[(int)Math.pow(2, N) - 1];
+        for(int i = 0; i < N; i++) tree.add(new ArrayList<Integer>());
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i = 0; i < arr.length; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        traversal(nodeCnt / 2, 0, (int)Math.pow(2, N - 2));
+        traversal(arr.length / 2, (int)Math.pow(2, N - 2), 0);
 
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < tree.get(i).size(); j++){
-                System.out.print(tree.get(i).get(j) + " ");
+        for(ArrayList<Integer> a : tree){
+
+            for(Integer i : a){
+                System.out.print(i + " ");
             }
             System.out.println();
         }
     }
 
-    public static void traversal(int idx, int depth, int nextIdx){
+    public static void traversal(int idx, int interval, int depth){
         if(depth == N) return;
-        
-        traversal(idx - nextIdx, depth + 1, nextIdx / 2);
+
+        traversal(idx - interval, interval / 2, depth + 1);
         tree.get(depth).add(arr[idx]);
-        traversal(idx + nextIdx, depth + 1, nextIdx / 2);
+        traversal(idx + interval, interval / 2, depth + 1);
     }
 }
