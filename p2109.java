@@ -1,25 +1,43 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class p2109 {
     public static BufferedReader br;
     public static int N;
     public static boolean[] visited;
-    public static PriorityQueue<int[]> pq;
+    public static PriorityQueue<Integer> pq;
+    public static List<int[]> list;
     public static void main(String[] args) throws IOException{
         init();
 
-        int amount = 0;
-        while(!pq.isEmpty()){
-            int[] now = pq.poll();
-
-            if(!canGo(now[1])) continue;
-            else{
-                amount += now[0];
+        Collections.sort(list, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] a1, int[] a2){
+                if(a1[1] == a2[1]) return a2[0] - a1[0];
+                else return a1[1] - a2[1];
             }
+        });
+
+        for(int[] arr : list){
+            int p = arr[0];
+            int d = arr[1];
+            
+            pq.add(p);
+            if(pq.size() > d){
+                pq.poll();
+            }
+        }
+        
+        int amount = 0;
+
+        while(!pq.isEmpty()){
+            amount += pq.poll();
         }
 
         System.out.println(amount);
@@ -27,13 +45,8 @@ public class p2109 {
     
     public static void init() throws IOException{
         br = new BufferedReader(new InputStreamReader(System.in));
-        pq = new PriorityQueue<>(new Comparator<int[]>(){
-            @Override
-            public int compare(int[] arr1, int[] arr2){
-                if(arr1[0] == arr2[0]) return arr1[1] - arr2[1];
-                else return arr2[0] - arr1[0];
-            }
-        });
+        list = new ArrayList<>();
+        pq = new PriorityQueue<>();
         N = Integer.parseInt(br.readLine());
         visited = new boolean[10004];
 
@@ -44,18 +57,7 @@ public class p2109 {
             p = Integer.parseInt(input[0]);
             d = Integer.parseInt(input[1]);
 
-            pq.add(new int[]{p, d});
+            list.add(new int[]{p, d});
         }
-    }
-
-    public static boolean canGo(int day){
-
-        for(int i = day; i > 0; i--){
-            if(!visited[i]){
-                visited[i] = true;
-                return true;
-            }
-        }
-        return false;
     }
 }
