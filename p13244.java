@@ -8,63 +8,63 @@ import java.util.Arrays;
 import java.util.List;
 
 public class p13244 {
-    public static int T, N, M;
+    public static BufferedReader br;
+    public static BufferedWriter bw;
+    public static int T, N, E;
     public static boolean[] visited;
-    public static List<Integer> map[];
+    public static List<List<Integer>> tree;
     public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        T = Integer.parseInt(br.readLine());
+        init();
 
         while(T-- > 0){
+            tree = new ArrayList<>();
+            Arrays.fill(visited, false);
             N = Integer.parseInt(br.readLine());
-            M = Integer.parseInt(br.readLine());
+            E = Integer.parseInt(br.readLine());
 
-            map = new ArrayList[N + 1];
-            visited = new boolean[N + 1];
-            Arrays.fill(map, new ArrayList<>());
-
-            String[] input;
-            int from, to;
-            for(int i = 0; i < M; i++){
-                input = br.readLine().split(" ");
-                from = Integer.parseInt(input[0]);
-                to = Integer.parseInt(input[1]);
-
-                map[from].add(to);
-                map[to].add(from);
+            for(int i = 0; i < N + 1; i++){
+                tree.add(new ArrayList<>());
             }
             
+            int a, b;
+            for(int i = 0; i < E; i++){
+                String[] input = br.readLine().split(" ");
+                a = Integer.parseInt(input[0]);
+                b = Integer.parseInt(input[1]);
+
+                tree.get(a).add(b);
+                tree.get(b).add(a);
+            }
+
             int cnt = 0;
-
             for(int i = 1; i <= N; i++){
-                if(!visited[i]) {
-                    dfs(i);
-                    cnt++;
-                }
-                
+                if(visited[i]) continue;
+                dfs(i);
+                cnt++;
             }
 
-            if(cnt == 1 && N - 1 == M) {
-                bw.write("tree\n");
-            } else {
-                bw.write("graph\n");
-            }
+            if(cnt == 1 && N == E + 1) bw.write("tree\n");
+            else bw.write("graph\n");
         }
 
-
         bw.flush();
-
         br.close();
         bw.close();
+    }
+
+    public static void init() throws IOException{
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        T = Integer.parseInt(br.readLine());
+        visited = new boolean[1004];
     }
 
     public static void dfs(int node){
         visited[node] = true;
 
-        for(int next : map[node]){
-            if(!visited[next]) dfs(next);
+        for(int next : tree.get(node)){
+            if(visited[next]) continue;
+            dfs(next);
         }
     }
 }
