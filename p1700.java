@@ -2,29 +2,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class p1700 {
-    public static BufferedReader br;
-    public static int N, M;
+    public static int N, K;
     public static int[] arr;
     public static boolean[] visited;
     public static List<Integer> socket;
+    public static BufferedReader br;
+
     public static void main(String[] args) throws IOException{
         init();
-        int res = 0;
 
-        for(int i = 0; i < M; i++){
+        int res = 0;
+        for(int i = 0; i < K; i++){
             if(visited[arr[i]]) continue;
 
             if(socket.size() == N){
-                int idx = 0, item = 0;
-                for(int s : socket){
+                int idx = 0, target = -1;
+                for(int item : socket){
                     int itemIdx = Integer.MAX_VALUE;
-                    for(int j = i + 1; j < M; j++){
-                        if(arr[j] == s){
+
+                    for(int j = i + 1; j < K; j++){
+                        if(item == arr[j]){
                             itemIdx = j;
                             break;
                         }
@@ -32,33 +32,33 @@ public class p1700 {
 
                     if(itemIdx > idx){
                         idx = itemIdx;
-                        item = s;
+                        target = item;
                     }
                 }
 
-                socket.remove(socket.indexOf(item));
-                visited[item] = false;
+                socket.remove(socket.indexOf(target));
+                visited[target] = false;
                 res++;
             }
 
             socket.add(arr[i]);
             visited[arr[i]] = true;
         }
-
+        
         System.out.println(res);
     }
-    
+
     public static void init() throws IOException{
         br = new BufferedReader(new InputStreamReader(System.in));
         String[] input = br.readLine().split(" ");
         N = Integer.parseInt(input[0]);
-        M = Integer.parseInt(input[1]);
-        arr = new int[M];
-        visited = new boolean[M + 1];
+        K = Integer.parseInt(input[1]);
+        arr = new int[K];
+        visited = new boolean[K + 1];
         socket = new ArrayList<>();
 
         input = br.readLine().split(" ");
-        for(int i = 0; i < M; i++){
+        for(int i = 0; i < K; i++){
             arr[i] = Integer.parseInt(input[i]);
         }
     }
