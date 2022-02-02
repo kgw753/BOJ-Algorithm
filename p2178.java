@@ -3,56 +3,58 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class p2178{
-    static int N;
-    static int M;
-    static int[][] map;
-    static boolean[][] visited;
-    static int[] dy = {0, 1, 0, -1};
-    static int[] dx = {1, 0, -1, 0};
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        map = new int[N][M];
-        visited = new boolean[N][M];
-        for(int i = 0 ; i < N; i++){
-            String input = br.readLine();
-            for(int j = 0; j < M; j++){
-                map[i][j] = input.charAt(j) - '0';
-            }
-        }
-        bfs(0, 0);
-        System.out.println(map[N - 1][M - 1]);
-        print();
+    public static int N, M;
+    public static int[] dy = {0, 1, 0, -1};
+    public static int[] dx = {1, 0, -1, 0};
+    public static boolean[][] map;
+    public static int[][] visited;
+    public static BufferedReader br;
+    public static void main(String[] args)throws IOException{
+        init();
+        bfs();
+        System.out.println(visited[N - 1][M - 1]);
     }
-    public static void print(){
+    public static void init() throws IOException{
+        br = new BufferedReader(new InputStreamReader(System.in));
+        String[] numbers = br.readLine().split(" ");
+        N = Integer.parseInt(numbers[0]);
+        M = Integer.parseInt(numbers[1]);
+        map = new boolean[N][M];
+        visited = new int[N][M];
+
+        String input;
+
         for(int i = 0; i < N; i++){
+            input = br.readLine();
+
             for(int j = 0; j < M; j++){
-                System.out.print(map[i][j]);
+                if(input.charAt(j) == '1') map[i][j] = true;
             }
-            System.out.println();
         }
-        System.out.println();
     }
-    public static void bfs(int y, int x){
+
+    public static void bfs(){
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y, x});
-        visited[y][x] = true;
+        q.add(new int[]{0, 0});
+        visited[0][0] = 1;
+
+        int y, x;
         while(!q.isEmpty()){
-            int[] nowPos = q.poll();
-            y = nowPos[0];
-            x = nowPos[1];
+            y = q.peek()[0];
+            x = q.peek()[1];
+            q.poll();
+
             for(int i = 0; i < 4; i++){
                 int ny = y + dy[i];
                 int nx = x + dx[i];
-                if(ny < 0 || nx < 0 || ny >= N || nx >= M || visited[ny][nx] || map[ny][nx] == 0) continue;
-                visited[ny][nx] = true;
-                map[ny][nx] = map[y][x] + 1;
-                q.add(new int[]{ny, nx});
+
+                if(ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
+                if(map[ny][nx] && visited[ny][nx] == 0){
+                    q.add(new int[]{ny, nx});
+                    visited[ny][nx] = visited[y][x] + 1;
+                }
             }
         }
     }
