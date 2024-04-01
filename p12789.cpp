@@ -16,6 +16,7 @@ int main(){
     if(st.empty() || arr[i] < st.top()){
       st.push(arr[i]);
     } else if(arr[i] > st.top()){
+      
       break;
     }
 
