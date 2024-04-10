@@ -4,6 +4,7 @@
         "queue": "cpp",
         "algorithm": "cpp",
         "vector": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "ios": "cpp"
     }
 }
