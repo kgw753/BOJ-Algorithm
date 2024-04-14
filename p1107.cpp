@@ -1,63 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAX_N = 500001;
-const int MAX_M = 10;
+
+const int MAX = 500001;
+const int MAX_BUTTON = 10;
 const int START = 100;
-int N, M, res;
-bool notWork[MAX_M];
+int N, M, ans1 = 1e9, ans2 = 1e9;
+bool broken[MAX_BUTTON];
 
-int getPressCount(int num) {
-  if (num == 0)
-    return 1;
-  int cnt = 0;
-  while (num > 0) {
-    cnt++;
-    num /= 10;
-  }
-  return cnt;
-}
-
-bool checkPressable(int num) {
-  if (num == 0) {
-    return !notWork[0];
+bool checkPressable(int channel) {
+  if (channel == 0) {
+    return !broken[0];
   }
 
-  while (num > 0) {
-    int n = num % 10;
-    if (notWork[n]) {
+  while (channel > 0) {
+    int currButton = channel % 10;
+    if (broken[currButton]) {
       return false;
     }
-    num /= 10;
+    channel /= 10;
   }
 
   return true;
 }
 
 void solve() {
-  int res = abs(START - N);
-  for (int i = 0; i < MAX_N; i++) {
-    if (N - i >= 0 && checkPressable(N - i)) {
-      res = min(res, (int)to_string(N - i).length() + i);
+  ans1 = abs(START - N);
+  for (int i = 0; i < MAX; i++) {
+    int goDown = N - i;
+    int goUp = N + i;
+    if (goDown >= 0 && checkPressable(goDown)) {
+      ans2 = to_string(goDown).length() + i;
       break;
     }
-    if (checkPressable(N + i)) {
-      res = min(res, (int)to_string(N + i).length() + i);
+    if (checkPressable(goUp)) {
+      ans2 = to_string(goUp).length() + i;
       break;
     }
   }
-  cout << res << "\n";
+
+  cout << min(ans1, ans2) << "\n";
 }
 
 void input() {
   cin >> N >> M;
-  int idx;
+  int buttonIdx;
   for (int i = 0; i < M; i++) {
-    cin >> idx;
-    notWork[idx] = true;
+    cin >> buttonIdx;
+    broken[buttonIdx] = true;
   }
 }
-
 int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
   input();
   solve();
 }
